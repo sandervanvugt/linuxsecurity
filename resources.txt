@@ -1,0 +1,11 @@
+Study the following resources for more information:
+
+Basic permissions: https://learning.oreilly.com/videos/red-hat-certified/9780137931521/9780137931521-RHL9_03_10_00/
+Special permissions: https://learning.oreilly.com/videos/linux-foundation-certified/9780138230678/9780138230678-LFL2_02_10_03/
+ACLs and file system attributes: https://learning.oreilly.com/videos/red-hat-certified/9780135656495/9780135656495-RCSA_01_07_08/
+LUKS ecrypted devices: https://learning.oreilly.com/videos/linux-security-red/9780134598345/9780134598345-LISE_01_02_01/
+PAM: https://learning.oreilly.com/videos/linux-security-red/9780134598345/9780134598345-LISE_02_09_03/
+Firewalling: https://learning.oreilly.com/videos/comptia-linux-xk0-005/9780137903726/9780137903726-CLP3_04_13_00/
+Auditing: https://learning.oreilly.com/videos/linux-security-red/9780134598345/9780134598345-LISE_01_05_00/
+SELinux: https://learning.oreilly.com/course/mastering-security-enhanced-linux/9780138282691/
+AppArmor: https://learning.oreilly.com/videos/linux-security-red/9780134598345/9780134598345-LISE_01_06_00/
