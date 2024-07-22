@@ -1,0 +1,225 @@
+    1  cat /etc/fstab
+    2  mount -o remount,rw /
+    3  vim /etc/crypttab 
+    4  sync
+    5  reboot
+    6  mount | grep secret
+    7  dnf install -y git
+    8  git clone https://github.com/sandervanvugt/linsec
+    9  git clone https://github.com/sandervanvugt/linuxsecurity
+   10  cd linuxsecurity/
+   11  ls
+   12  history
+   13  tail -1 /etc/fstab /etc/crypttab
+   14  tail -1 /etc/fstab 
+   15  tail -1 /etc/crypt
+   16  tail -1 /etc/cryptab
+   17  history
+   18  tail -1 /etc/fstab /etc/crypttab
+   19  history
+   20  tail -1 /etc/fstab 
+   21  tail -1 /etc/crypttab
+   22  cd
+   23  ldd $(which login)
+   24  cd /usr/lib/pam.d/
+   25  ls
+   26  cd /lib64/security/
+   27  ls
+   28  vim /etc/securetty
+   29  chvt 4
+   30  cd /etc/pam.d/
+   31  ls
+   32  vim login 
+   33  man -k pam
+   34  man pam_securetty
+   35  vim login 
+   36  chvt 5
+   37  loginctl show-users
+   38* loginctl 
+   39  loginctl list-users
+   40  loginctl list-sessions
+   41  loginctl terminate-session 8
+   42  loginctl terminate-session 7
+   43  w
+   44  authselect current
+   45  authselect list-features minimal
+   46  authselect minimal with-pwhistory with-homedir with-faillock
+   47  authselect select minimal with-pwhistory with-homedir with-faillock
+   48  authselect select minimal with-pwhistory with-mkhomedir with-faillock
+   49  authselect select minimal with-pwhistory with-mkhomedir with-faillock --force
+   50  authselect current
+   51  pwd
+   52  vim password-auth 
+   53  cd /etc/security/
+   54  ls
+   55  vim faillock.conf 
+   56  vim pwquality.conf
+   57  useradd anna
+   58  passwd anna
+   59  dnf list aide*
+   60  dnf install aide
+   61  man aide
+   62  cd
+   63  cd /etc
+   64  ls
+   65  cp aide.conf aide.bak
+   66  vim aide.conf
+   67  aide --init
+   68  mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+   69  less /var/lib/aide/aide.db.gz
+   70  vim /etc/hosts
+   71  aide --check
+   72  cp /etc/aide.bak /etc/aide.conf
+   73  aide --init
+   74  cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+   75  useradd linda
+   76  passwd linda
+   77  aide --check
+   78  cd /home/anna
+   79  echo wortel > rootfile1
+   80  echo cattor > rootfile2
+   81  su - anna
+   82  ls -l /etc/shadow
+   83  cat /etc/shadow
+   84  ls -l /etc/shadow
+   85  echo inode > rootfile2
+   86  su - anna
+   87  echo inode > rootfile55
+   88  ls -l
+   89  su - anna
+   90  vim playme
+   91  chmod +x playme 
+   92  su - anna
+   93  chmod u+s playme 
+   94  ls -l
+   95  su - anna
+   96  find / -perm +4000 -exec ls -l {} \;
+   97  find / -perm +4000
+   98  man find
+   99  find / -perm /4000 -exec ls -l {} \;
+  100  ls -l /etc/shadow
+  101  history
+  102  dnf install -y httpd
+  103  mkdir /web
+  104  vim /web/index.html
+  105  vim /etc/httpd/conf/httpd.conf 
+  106  systemctl enable --now httpd
+  107  curl localhost
+  108  cd
+  109  getenforce permissive
+  110  curl localhost
+  111  getenforce
+  112  setenforce permissive
+  113  curl localhost
+  114  less /var/log/audit/audit.log 
+  115  grep AVC /var/log/audit/audit.log 
+  116  history
+  117  dnf install -y strace
+  118  strace ls
+  119  man auditctl
+  120  auditctl -w /etc/passwd -p wa -k passwd-access
+  121  cat /etc/passwd
+  122  grep passwd-access /var/log/audit/audit.log 
+  123  auditctl -w /bin -p x
+  124  ls
+  125  tail /var/log/audit/audit.log 
+  126  auditctl -w /bin -p x -k bin-access
+  127  ls
+  128  grep bin-access /var/log/audit/audit.log 
+  129  auditctl -l
+  130  history
+  131  cd /etc/audit/rules.d/
+  132  ls
+  133  vim audit.rules 
+  134  cd /usr/share/audit/sample-rules/
+  135  ls
+  136  less 30-stig.rules 
+  137  cp 30-stig.rules /etc/audit/rules.d/
+  138  cd /etc/audit/rules.d/
+  139  ls
+  140  vim audit.rules 
+  141  man -k audit
+  142  man auditd.conf 
+  143  cd
+  144  cd linuxsecurity/
+  145  history
+  146  ls -Z /var/www
+  147  setenforce enforcing
+  148  curl localhost
+  149  ls -Z /var/www
+  150  ls -Zd /web
+  151  ps Zaux | grep httpd
+  152  grep AVC /var/log/audit/audit.log 
+  153  man semanage-fcontext
+  154  semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
+  155  restorecon -Rv /web
+  156  curl localhost
+  157  journalctl | grep sealert
+  158  sealert -l 8b0e88e3-8507-4426-8b5f-c5a7699d5838
+  159  sealert -l 8b0e88e3-8507-4426-8b5f-c5a7699d5838 | less
+  160  vim /etc/httpd/conf/httpd.conf 
+  161  systemctl restart httpd
+  162  journalctl | grep sealert
+  163  sealert -l a2419614-820f-44a3-9b1c-8eee885da1bd
+  164  sealert -l a2419614-820f-44a3-9b1c-8eee885da1bd | less
+  165  semanage port -a -t http_port_t -p tcp 82
+  166  systemctl restart httpd
+  167  semanage user -l
+  168  semanage login -l
+  169  su - anna
+  170  semanage login -m -s user_u anna
+  171  semanage login -a -s user_u anna
+  172  su - anna
+  173  semanage login -l
+  174  chvt 4
+  175  journalctl | grep sealert
+  176  grep AVC /var/log/audit/audit.log 
+  177  chvt 4
+  178  grep AVC /var/log/audit/audit.log 
+  179  journalctl 
+  180  semanage login -a -s sysadm_u root
+  181  semanage login -l
+  182  vim /etc/ssh/sshd_config
+  183  systemctl restart sshd
+  184  ssh root@localhost
+  185  grep AVC /var/log/audit/audit.log 
+  186  journalctl | grep sealert
+  187  sealert -l b91091b9-a648-41cf-bff3-77833332b21f | less
+  188  setsebool -P ssh_sysadm_login 
+  189  setsebool -P ssh_sysadm_login=on
+  190  setsebool -a | grep sysad
+  191  getsebool -a | grep sysad
+  192  ssh root@localhost
+  193  ssh sander@192.168.52.132
+  194  history
+  195  sudo dnf install scape-workbench scap-security-guide openscap
+  196  sudo dnf install scap-workbench scap-security-guide openscap
+  197  scap-workbench 
+  198  cd
+  199  ls
+  200  cd linuxsecurity/
+  201  ls
+  202  less whatever.xml 
+  203  scap-workbench 
+  204  ls -l
+  205  less whatever.xml 
+  206  scp student@tang:
+  207  scp whatever.xml student@tang:
+  208  ip a
+  209  ls
+  210  oscap xccdf generate fix --profile xccdf_org.ssgproject.content_profile_stig_customized --tailoring-file whatever.xml --fix-type ansible --result-id "" /home/student/lab-results.xml > fix.yml
+  211  vim fix.yml
+  212  ls -l
+  213  oscap xccdf generate fix --help
+  214  ls
+  215  ls -l /home/student/lab-results.xml 
+  216  oscap xccdf generate fix --help
+  217  oscap xccdf generate fix --profile xccdf_org.ssgproject.content_profile_stig_customized --fix-type ansible --result-id "" --tailoring-file whatever.xml /home/student/lab-results.xml
+  218  oscap xccdf generate fix --profile xccdf_org.ssgproject.content_profile_stig_customized --fix-type ansible --result-id "" --tailoring-file /root/linuxsecurity/whatever.xml /home/student/lab-results.xml
+  219  ls
+  220  cd /home/student
+  221  ls
+  222  firefox lab-results.html 
+  223  oscap xccdf generate fix --help
+  224  history
+  225  history > 22Jul24.txt
