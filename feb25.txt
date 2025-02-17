@@ -1,0 +1,18 @@
+    1  ssh-keygen
+    2  ssh-copy-id control
+    3  ssh-copy-id linfun
+    4  ansible -i inventory -a "whoami"
+    5  ansible -i inventory all -a "whoami"
+    6  vim inventory
+    7  ansible -i inventory all -a "whoami"
+    8  vim ansible.cfg
+    9  ansible all -a "ls -l /root"
+   10  vim playbook.yml
+   11  ansible-doc service
+   12  vim playbook.yml
+   13  ansible-playbook playbook.yml 
+   14  ansible-doc -l
+   15  ansible-doc copy
+   16  ansible-galaxy collection install ansible.posix
+   17  ansible-doc -l
+   18  history > /tmp/feb25.txt
