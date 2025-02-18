@@ -1,18 +1,366 @@
-    1  ssh-keygen
-    2  ssh-copy-id control
-    3  ssh-copy-id linfun
-    4  ansible -i inventory -a "whoami"
-    5  ansible -i inventory all -a "whoami"
-    6  vim inventory
-    7  ansible -i inventory all -a "whoami"
-    8  vim ansible.cfg
-    9  ansible all -a "ls -l /root"
-   10  vim playbook.yml
-   11  ansible-doc service
-   12  vim playbook.yml
-   13  ansible-playbook playbook.yml 
-   14  ansible-doc -l
-   15  ansible-doc copy
-   16  ansible-galaxy collection install ansible.posix
-   17  ansible-doc -l
-   18  history > /tmp/feb25.txt
+    1  lsblk
+    2  ls -l /dev/mapper/rhel-root 
+    3  lsblk
+    4  fdisk /dev/nvme0n1
+    5  cryptsetup luksFormat /dev/nvme0n1p4
+    6  ls /dev/mapper/
+    7  cryptsetup luksOpen /dev/nvme0n1p4 secret
+    8  ls /dev/mapper/
+    9  mkfs.ext4 /dev/mapper/secret
+   10  mount /dev/mapper/secret /mnt
+   11  cp /etc/passwd /etc/shadow mtn
+   12  cp /etc/passwd /etc/shadow /mtn
+   13  cp /etc/passwd /etc/shadow /mnt
+   14  ls /mnt
+   15  xxd /dev/mapper/secret | less
+   16  umount /mnt
+   17  cryptsetup close /dev/mapper/secret
+   18  ls /dev/mapper/
+   19  xxd /dev/nvme0n1p4 | less
+   20  history
+   21  xxd /dev/nvme0n1 | less
+   22  xxd /dev/nvme0n1p1 | less
+   23  cryptsetup luksChangeKey
+   24  cryptsetup luksChangeKey /dev/nvme0n1p4
+   25  mkdir /secret
+   26  man crypttab
+   27  vim /etc/crypttab
+   28  vim /etc/fstab
+   29  vim /etc/default/grub 
+   30  grub2-mkconfig -o /boot/grub2/grub.cf
+   31  grub2-mkconfig -o /boot/grub2/grub.cfg
+   32  reboot
+   33  git clone https://github.com/sandervanvugt/linsec
+   34  git clone https://github.com/sandervanvugt/linuxsecurity
+   35  cd linuxsecurity/
+   36  ls
+   37  ./countdown 12
+   38  vim /etc/fstab
+   39  vim /etc/crypttab 
+   40  reboot
+   41  passwd 
+   42  exit
+   43  chvt 2
+   44  exit
+   45  lsblk
+   46  history
+   47  vim /etc/securetty
+   48  chvt 3
+   49  vim /etc/securetty
+   50  ldd $(which login)
+   51  cd /etc/pam.d/
+   52  ls
+   53  vim login
+   54  find / -name "pam_nologin.so"
+   55  cd /usr/lib64/security/
+   56  ls
+   57  man pam_securetty
+   58  vim /etc/pam.d/login 
+   59  chvt 3
+   60  vim /etc/pam.d/login 
+   61  vim /etc/pam.d/system-auth 
+   62  authselect current
+   63  authselect list
+   64  authselect list-features minimal
+   65  authselect select minimal with-pwhistory with-mkhomedir
+   66  authselect select minimal with-pwhistory with-mkhomedir --force
+   67  systemctl enable --now oddjobd.service
+   68  dnf install oddjobd
+   69  dnf provides */oddjobd.service
+   70  dnf install oddjob
+   71  authselect enable-feature with-faillock
+   72  authselect current
+   73  pwd
+   74  cd /etc/security/
+   75  ls
+   76  vim pwquality.conf
+   77  useradd linda
+   78  passwd linda
+   79  vim faillock.conf 
+   80  history
+   81  cd
+   82  dnf install -y aide
+   83  vim /etc/aide.conf 
+   84  touch /etc/sander
+   85  aide --init
+   86  cd /var/lib/aide/
+   87  ls
+   88  mv aide.db.new.gz aide.db.gz
+   89  cd
+   90  echo hhhh >> /etc/sander 
+   91  chmod +x /etc/sander
+   92  aide --check
+   93  cd /var/log/aide/
+   94  ls
+   95  less aide.log 
+   96  aide --check
+   97  echo $?
+   98  aide --init
+   99  pwd
+  100  cd /var/lib/aide/
+  101  mv aide.db.new.gz aide.db.gz
+  102  cd
+  103  aide --check
+  104  echo $?
+  105  less /var/log/audit/audit.log 
+  106  mkdir /web
+  107  dnf install -y httpd
+  108  vim /etc/httpd/conf/httpd.conf 
+  109  vim /web/index.html
+  110  systemctl restart httpd
+  111  curl localhost
+  112  getenforce
+  113  setenforce permissive
+  114  curl localhost
+  115  cd /var/log/
+  116  ls
+  117  cd httpd/
+  118  ls
+  119  ls -l
+  120  less error_log 
+  121  vim /etc/httpd/conf/httpd.conf 
+  122  systemctl restart httpd
+  123  curl localhost
+  124  setenforce enforcing
+  125  curl localhost
+  126  grep AVC /var/log/audit/audit.log 
+  127  cd
+  128  auditctl -w /etc/passwd -p wa -k passwd-access
+  129  cat /etc/passwd
+  130  grep passwd-access /var/log/audit/audit.log 
+  131  useradd anna
+  132  grep passwd-access /var/log/audit/audit.log 
+  133  cat /etc/passwd
+  134  grep passwd-access /var/log/audit/audit.log 
+  135  auditctl -w /etc/passwd -p rwa -k passwd-access
+  136  cat /etc/passwd
+  137  grep passwd-access /var/log/audit/audit.log 
+  138  history
+  139  man auditctl
+  140  auditctl -a always,exit -F dir=/home/ -F uid=0 -C auid!=obj_uid
+  141  ls /home
+  142  auditctl -a always,exit -F dir=/home/ -F uid=0 -C auid!=obj_uid -k NASTY
+  143  cd /home/anna
+  144  ls -a
+  145  less .bashrc
+  146  grep NASTY /var/log/audit/audit.log 
+  147  less /var/log/audit/audit.log 
+  148  auditctl -l
+  149  vim /etc/audit/rules.d/audit.rules
+  150  auditctl -D
+  151  auditctl -l
+  152  augenrules --load
+  153  auditctl -l
+  154  cat .bashrc 
+  155  cd
+  156  grep NASTY /var/log/audit/audit.log 
+  157  ausearch -i -a 568
+  158  grep AVC /var/log/audit/audit.log 
+  159  grep ':358)' /var/log/audit/audit.log
+  160  ausearch -m AVC -i -a
+  161  grep ':358)' /var/log/audit/audit.log
+  162  grep AVC /var/log/audit/audit.log 
+  163  ausearch -m AVC -i -a 594
+  164  ausearch -m AVC -i -a 355
+  165  man ausearch
+  166  cd /usr/share/audit/sample-rules/
+  167  ls
+  168  less 30-ospp-v42-5-perm-change-success.rules 
+  169  less 30-stig.rules 
+  170  cp 30-stig.rules /etc/audit/rules.d/
+  171  cd /etc/audit/rules.d/
+  172  ls
+  173  auditcl -l
+  174  auditctl -l
+  175  augenrules --load
+  176  auditctl -l
+  177  ausearch -m AVC -i -a 355
+  178  grep AVC /var/log/audit/audit.log 
+  179  cd
+  180  dnf install fapolicyd
+  181  systemctl enable --now fapolicyd
+  182  cp /bin/ls /tmp/ls
+  183  exit
+  184  fapolicyd-cli --file add /tmp/ls --trust-file myapp
+  185  fapolicyd-cli --update
+  186  exit
+  187  history
+  188  dnf install -y nmap
+  189  nmap -sn 192.168.52.0/24
+  190  nmap 192.168.52.160
+  191  ssh student@192.168.52.160
+  192  dnf install -y ansible-core
+  193  exit
+  194  ls -lZ /var/www
+  195  exit
+  196  chvt 4
+  197  chvt 2
+  198  vim /etc/sysconfig/selinux 
+  199  reboot
+  200  cd linuxsecurity/
+  201  ./countdown 1
+  202  ./countdown 12
+  203  ./countdown 1
+  204  ./countdown 12
+  205  ./countdown 16
+  206  cd /etc/selinux/targeted/
+  207  ls
+  208  cd contexts/
+  209  ls
+  210  cd files/
+  211  ls
+  212  mv file_contexts.bin .file_contexts.bin
+  213  mv file_contexts .file_contexts
+  214  useradd bob
+  215  mv .file_contexts.bin file_contexts.bin
+  216  mv file_contexts.bin .file_contexts.bin
+  217  reboot
+  218  vim /etc/httpd/conf/httpd.conf 
+  219  systemctl restart httpd
+  220  systemctl status httpd
+  221  vim /etc/httpd/conf/httpd.conf 
+  222  systemctl status httpd
+  223  systemctl stop
+  224  systemctl stop httpd
+  225  systemctl start httpd
+  226  grep AVC /var/log/audit/audit.log
+  227  ls
+  228  cd linuxsecurity/
+  229  ls
+  230  ./countdown 12
+  231  getsebool -a
+  232  getsebool -a | wc -l
+  233  semanage fcontext -l | wc -l
+  234  getsebool -a | grep ftp
+  235  setsebool -P ftpd_use_nfs on
+  236  getsebool -a | grep ftp
+  237  journalctl | grep sealert
+  238  sealert -l 55224124-6637-42a1-8a8c-151b3344bfbe | less
+  239  ausearch -c 'httpd' --raw | audit2allow -M my-httpd
+  240  semodule -i my-httpd.pp
+  241  ls my-*
+  242  vim  my-httpd.te
+  243  grep AVC /var/log/audit/audit.log
+  244  cat my-httpd.te 
+  245  seinfo -p my-httpd.pp
+  246  man seinfo
+  247  checkmodule -m -M -o test.te my-httpd.pp
+  248  sesearch --help | lessa
+  249  sesearch --help | less
+  250  seplicy
+  251  sepolicy
+  252  semodule_unpackage my-httpd.pp
+  253  semodule_unpackage my-httpd.pp my-httpd.mod
+  254  cat my-httpd.mod 
+  255  semodule_link -o y-httpd.cil - f my-httpd.mod
+  256  semodule_link -o y-httpd.cil -f my-httpd.mod
+  257  semodule_link --help
+  258  semodule_link -o y-httpd.cil my-httpd.mod
+  259  ls
+  260  cat my-httpd.te
+  261  semodule -l
+  262  cd 
+  263  git clone https://github.com/sandervanvugt/selinux
+  264  cd selinux/
+  265  ls
+  266  vim sander.te
+  267  vim sander.fc
+  268  checkmodule -M -m -o sander.mod sander.te
+  269  semodule_package -o sander.pp -m sander.mod -f sander.fc
+  270  semodule -i sander.pp
+  271  mkdir /opt/sander
+  272  ls -ld /opt/sander
+  273  ls -ldZ /opt/sander
+  274  restorecon -Rv /opt/sander
+  275  vim /etc/ssh/sshd_config
+  276  systemctl restart sshd
+  277  systemctl status sshd
+  278  dnf install policycoreutils-devel setools-console gcc
+  279  ls
+  280  vim mydaemon.c 
+  281  gcc -o mydaemon mydaemon.c
+  282  cp mydaemon /usr/local/bin
+  283  cp mydaemon.service /etc/systemd/system
+  284  vim mydaemon.service 
+  285  systemctl start mydaemon
+  286  ps Zaux | grep mydaemon
+  287  sepolicy generate --init /usr/local/bin/mydaemon 
+  288  vim mydaemon.te
+  289  ./mydaemon.sh
+  290  systemctl restart mydaemon
+  291  ps Zaux | grep mydaemon
+  292  grep AVC /var/log/audit/audit.log
+  293  sealert -l "*"
+  294  ausearch -c 'mydaemon' --raw | audit2allow -M my-mydaemon
+  295  cat my-mydaemon.te 
+  296  semodule -i my-mydaemon.pp
+  297  history
+  298  ./countdown 1
+  299  ./countdown 13
+  300  semanage login -l
+  301  seinfo -u
+  302  seinfo -r
+  303  semanage user -l
+  304  id linda -Z
+  305  id linda 
+  306  echo password | passwd --stdin linda
+  307  userdel -rf lisa
+  308  useradd -Z sysadm_u -G wheel lisa
+  309  echo password | passwd --stdin lisa
+  310  semanage login -a -s user_u linda
+  311  semanage login -l
+  312  ssh linda@localhost
+  313  vim /etc/ssh/sshd_config
+  314  systemctl restart sshd
+  315  ssh linda@localhost
+  316  semanage login -m -s sysadm_u root
+  317  semanage login -l
+  318  semanage login -m -s user_u -r s0 __default__
+  319  semanage login -l
+  320  id anna
+  321  getsebool -a | grep -E 'user|sysadm|staff'
+  322  exit
+  323  id -Z
+  324  grep wheel /etc/group
+  325  ssh lisa@localhost
+  326  semanage login -l
+  327  ssh linda@localhost
+  328  setsebool P ssh_sysadm_login on
+  329  setsebool -P ssh_sysadm_login on
+  330  ssh lisa@localhost
+  331  grep AVC /var/log/audit/audit.log
+  332  journalctl | grep sealert
+  333  sealert -l 13030795-bec8-4811-9e93-d84f2e283758 | less
+  334  journalctl | grep sealert
+  335  sealert -l 7ec5424e-1da8-4c59-8ab0-d05d4e358715 | less
+  336  semanage user -l
+  337  semanage login -l
+  338  man semanage-login
+  339  semanage login -m -s guest_u __default__
+  340  history | grep __default__
+  341  semanage login -m -s user_u -r s0 __default__
+  342  semanage login -l
+  343  ssh linda@localhost
+  344  cd linuxsecurity/
+  345  ./countdown 16
+  346  cd
+  347  dnf search scap
+  348  dnf install -y scap-workbench-1.2.1-13.el9.aarch64 scap-security-guide openscap
+  349  scap-workbench &
+  350  ls
+  351  ls -l
+  352  vim remediation.yml 
+  353  cp remediation.yml /home/ansible/
+  354  su - ansible
+  355  exit
+  356  su - ansible
+  357  exit
+  358  ls
+  359  scap-workbench &
+  360  ls
+  361  cp ssg-rhel9-ds-xccdf.report-new.html /tmp
+  362  ls -l /tmp
+  363  ls
+  364  cd linuxsecurity/
+  365  man nologin
+  366  history > /tmp/feb25.txt
