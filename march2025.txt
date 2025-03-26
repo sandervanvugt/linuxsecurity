@@ -1,0 +1,198 @@
+    1  lvs
+    2  vgs
+    3  ls -l /dev/mapper/
+    4  lsblk
+    5  fdisk /dev/nvme0n1
+    6  cryptsetup luksFormat /dev/nvme0n1p4
+    7  echo 'P@$$w0rd!@#'
+    8  ls -l /dev/mapper/
+    9  cryptsetup luksOpen /dev/nvme0n1p4 secret
+   10  ls -l /dev/mapper/
+   11  mount /dev/mapper/secret /mnt
+   12  mkfs.ext4 /dev/mapper/secret 
+   13  mount /dev/mapper/secret /mnt
+   14  man crypttab
+   15  vim /etc/crypttab 
+   16  vim /etc/fstab
+   17  mkdir /secret
+   18  reboot
+   19  lsblk
+   20  history
+   21  cat /etc/crypttab 
+   22  tail -1 /etc/fstab
+   23  dnf install -y git
+   24  git clone https://github.com/sandervanvugt/linsec
+   25  git clone https://github.com/sandervanvugt/linuxsecurity
+   26  cd linuxsecurity/
+   27  ls
+   28  ./countdown 12
+   29  cd
+   30  ldd $(which login)
+   31  ldd $(which ssh)
+   32  cd /etc/pam.d/
+   33  ls
+   34  vim login 
+   35  vim system-auth 
+   36  find / -name "
+
+   37  find / -name "pam_deny.so"
+   38  cd /usr/lib64/security/
+   39  ls
+   40  man pam_cap
+   41  man pam_nologin
+   42  vim /etc/securetty
+   43  passwd root
+   44  chvt 3
+   45  man pam_securetty
+   46  vim /etc/pam.d/login
+   47  chvt 3
+   48  w
+   49  loginctl list-users
+   50  loginctl list-sessions
+   51  loginctl kill-session 6
+   52  loginctl list-sessions
+   53  w
+   54  cd 
+   55  ls
+   56  cd /etc/pam.d/
+   57  ls
+   58  vim other 
+   59  mv login login.bak
+   60  history
+   61  ls /usr/lib64/security/
+   62  vim login
+   63  cat /etc/pam.d/login.bak 
+   64  cat /etc/pam.d/login
+   65  useradd lisa
+   66  chvt 4
+   67  mv login.bak login
+   68  authselect current
+   69  authselect lsit
+   70  authselect list
+   71  authselect list-features minimal
+   72  cd /etc/security/
+   73  ls
+   74  cat faillock.conf 
+   75  ls
+   76  vim pwquality.conf
+   77  cd
+   78  cd linuxsecurity/
+   79  ./countdown 1
+   80  cd
+   81  dnf install -y aide
+   82  aide --init
+   83  vim /etc/aide.conf 
+   84  mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+   85  useradd anna
+   86  aide --check
+   87  touch /root/removeme
+   88  chattr +i /root/removeme 
+   89  rm -f /root/removeme 
+   90  whoami
+   91  ls -l /root/removeme 
+   92  lsattr /root/removeme 
+   93  chattr -i /root/removeme 
+   94  rm -f /root/removeme 
+   95  touch /home/anna/removeme
+   96  su - anna
+   97  echo hello > /home/anna/readme
+   98  chmod 600 /home/anna/readme
+   99  su - anna
+  100  mkdir /home/anna/sub
+  101  touch /home/anna/sub/file
+  102  su - anna
+  103  history
+  104  dnf install -y strace
+  105  strace ls
+  106  strace -c ls
+  107  auditctl -w /etc/passwd -p wa -k passwd-access
+  108  cat /etc/passwd
+  109  grep passwd-access /var/log/audit/audit.log 
+  110  useradd linda
+  111  grep passwd-access /var/log/audit/audit.log 
+  112  auditctl -w /bin -p x -k PROGRAMSTART
+  113  ls
+  114  grep PROGR /var/log/audit/audit.log 
+  115  man auditctl
+  116  auditctl -l
+  117  cd /usr/share/audit/sample-rules/
+  118  ls
+  119  less 30-ospp-v42.rules 
+  120  cp 30-ospp-v42.rules /etc/audit/rules.d/
+  121  augenrules --load
+  122  auditctl -l
+  123  cd /etc/audit/
+  124  ls
+  125  vim audit.rules
+  126  man auditctl
+  127  history
+  128  cd
+  129  dnf install -y httpd
+  130  getenforce
+  131  systemctl enable --now httpd
+  132  bg
+  133  vim /etc/hosts
+  134  ip a
+  135  vim /etc/hosts
+  136  ps aux | grep http
+  137  ps auxZ | grep http
+  138  ls -Z /var/www
+  139  vim /etc/httpd/conf/httpd.conf 
+  140  mkdir /web
+  141  vim /web/index.html
+  142  systemctl restart httpd
+  143  curl localhost
+  144  ls -ldZ /web
+  145  setenforce permissive
+  146  curl localhost
+  147  setenforce enforcing
+  148  grep AVC /var/log/audit/audit.log 
+  149  man date
+  150  date -d 1743010284
+  151  date -d=1743010284
+  152  date -d=@1743010284
+  153  date -d @1743010284
+  154  ls -ldZ /var/tmp
+  155  history
+  156  man semanage-fcontext
+  157  semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
+  158  ls -Zd /web
+  159  restorecon -R /web
+  160  ls -Zd /web
+  161  getenforce
+  162  curl localhost
+  163  vim /etc/httpd/conf/httpd.conf 
+  164  systemctl restart httpd
+  165  systemctl status httpd
+  166  grep AVC /var/log/audit/audit.log 
+  167  journalctl | grep sealert
+  168  sealert -l 68d582b8-32ce-4bb8-a7d3-58fe733080ea | less
+  169  semanage port -a -t http_port_t -p tcp 82
+  170  systemctl restart httpd
+  171  history
+  172  semanage user -l
+  173  man semanage-port
+  174  dnf search selinux*
+  175  dnf list selinux*
+  176  dnf install selinux-policy-doc
+  177  mandb
+  178  man -k _selinux | wc -l
+  179  man -k _selinux | grep http
+  180  man httpd_selinux 
+  181  usermod -aG wheel anna
+  182  id anna
+  183  su - anna
+  184  passwd anna
+  185  su - anna
+  186  semanage login -a -s user_u anna
+  187  semanage user -l
+  188  semanage login -l
+  189  su - anna
+  190  ssh anna@localhost
+  191  cd linuxsecurity/
+  192  ./countdown 12
+  193  dnf search scap
+  194  dnf install openscap openscap-utils scap-security-guide scap-workbench
+  195  scap-workbench 
+  196  cd
+  197  history > /tmp/march2025.txt
