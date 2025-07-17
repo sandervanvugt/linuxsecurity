@@ -253,3 +253,21 @@
   253  ssh student@192.168.29.99
   254  ssh ansible@192.168.29.99
   255  history > /tmp/july25.txt
+  256  ip a
+  257  dnf install nfstables
+  258  dnf install nftables
+  259  systemctl enable --now nftables
+  260  systemctl disable --now firewalld
+  261  nft list ruleset
+  262  nft add table inet webtraffic
+  263  nft 'add chain inet webtraffic input { type filter hook input priority filter; policy drop; }'
+  264  ping localhost
+  265  nft add rule inet webtraffic input ct state related,established accept
+  266  ping nu.nl
+  267  nft add rule inet webtraffic input tcp dport { 80, 443 } accept
+  268  nft list ruleset inet webtraffic
+  269* 
+  270  nft add rule inet webtraffic input tcp dport { 22 } accept
+  271  nft list ruleset inet
+  272  nft list ruleset > /etc/nftables.conf
+  273  history > /tmp/july25.txt 
