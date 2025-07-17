@@ -1,0 +1,255 @@
+    1  ls /secret
+    2  curl -f http://192.168.29.100/adv
+    3  dnf install clevis clevis-luks clevis-dracut
+    4  clevis luks bind -f -d /dev/nvme0n1p4 tang '{"url":"http://192.168.29.100"}'
+    5  vim /etc/crypttab 
+    6  vim /etc/fstab
+    7  reboot
+    8  mount | grep secret
+    9  ls /secret
+   10  ldd $(which login)
+   11  cd /etc/pam.d/
+   12  ls
+   13  vim login
+   14  find / -name "pam_selinux.so"
+   15  cd /usr/lib64/security/
+   16  ls
+   17  man -k pam_
+   18  man pam_time
+   19  cd /etc/pam.d
+   20  ls
+   21  vim login 
+   22  vim system-auth 
+   23  passwd root
+   24  chvt 3
+   25  vim /etc/securetty
+   26  chvt 3
+   27  cd /usr/lib64/security/
+   28  ls
+   29  cd -
+   30  vim login
+   31  man pam_securetty
+   32  vim login
+   33  chvt 3
+   34  ls
+   35  history
+   36  cd ../security/
+   37  ls
+   38  vim pwquality.conf
+   39  vim /etc/login.defs 
+   40  cd
+   41  cd /etc/sssd/
+   42  ls
+   43  cd conf.d/
+   44  ls
+   45  cd ..
+   46  rpm -qa | grep sssd
+   47  rpm -qc sssd-ldap 
+   48  cd pam.d/
+   49  vim login 
+   50  vim system-auth 
+   51  ls /usr/lib64/security/
+   52  vim login 
+   53  cp login login.bak
+   54  vim login
+   55  chvt 5
+   56  vim login
+   57  chvt 5
+   58  mv login.bak login
+   59  cd
+   60  dnf install -y aide
+   61  aide --init
+   62  cd /var/lib/aide/
+   63  ls
+   64  mv aide.db.new.gz aide.db
+   65  cd /etc
+   66  vim aide.conf 
+   67  chmod 777 hosts
+   68  cd
+   69  aide --check
+   70  cd /var/lib/aide/
+   71  mv aide.db aide.db.gz
+   72  cd
+   73  aide --check
+   74  chmod 644 /etc/hosts
+   75  mkdir /var/log/journal
+   76  systemctl list-unit-files | grep flush
+   77  ls -l /var/log/journal/
+   78  systemctl restart systemd-journal-flish
+   79  systemctl restart systemd-journal-flush
+   80  ls -l /var/log/journal/
+   81  systemctl status auditd
+   82  dnf install -y httpd
+   83  mkdir /repo
+   84  vim /repo/index.html
+   85  vim /etc/httpd/conf/httpd.conf 
+   86  systemctl restart httpd
+   87  curl localhost
+   88  grep AVC /var/log/audit/audit.log 
+   89  date -d @1752767448
+   90  ls -l /dev/mapper/
+   91  grep '.830:' /var/log/audit/audit.log 
+   92  dnf install -y strace
+   93  strace ls
+   94  man 2 mmap
+   95  auditctl -w /etc/passwd -p wa -k passwd-access
+   96  cat /etc/passwd
+   97  grep passwd-access /var/log/audit/audit.log 
+   98  useradd anna
+   99  grep passwd-access /var/log/audit/audit.log 
+  100  auditctl -w /bin -p x
+  101  which ls
+  102  /bin/ls
+  103  tail /var/log/audit/audit.log 
+  104  history
+  105  auditctl -a exit,always -F dir=/home/ -F uid=0 -C auid!=obj_uid -k SUDO_ABUSE
+  106  cd /home/anna/
+  107  ls -a
+  108  cat .bashrc
+  109  grep SUDO_ABUSE /var/log/audit/audit.log 
+  110  grep '.063:' /var/log/audit/audit.log 
+  111  auditctl -a exit,always -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -k DELETE
+  112  auditctl -a exit,always -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -k DELETE
+  113  man -k unlink | grep 2
+  114  auditctl -a exit,always -F arch=b64 -S unlinkat -S rename -S renameat -k DELETE
+  115  auditctl -a exit,always -F arch=b64 -S unlinkat  -S renameat -k DELETE
+  116  cd
+  117  cp /etc/hosts .
+  118  strace -c rm hosts
+  119  history
+  120  grep DELETE /var/log/audit/audit.log 
+  121  grep DELETE /var/log/audit/audit.log | wc -l
+  122  auditctl -l
+  123  auditctl -D
+  124  cd /etc/audit/
+  125  ls
+  126  cat audit.rules 
+  127  cd rules.d
+  128  ls
+  129  cat audit.rules 
+  130  cd /usr/share/audit-rules/
+  131  ls
+  132  ls -l
+  133  vim 30-stig.rules 
+  134  ls
+  135  history
+  136   cd
+  137  ls -ld /var/tmp
+  138  ps Zaux | grep http
+  139  ls -Zl /var/www
+  140  ls -lZ /var/tmp
+  141  ls -ldZ /var/tmp
+  142  ls -dZ /repo/
+  143  history
+  144  grep AVC /var/log/audit/audit.log 
+  145  setenforce permissive
+  146  curl localhost
+  147  grep AVC /var/log/audit/audit.log 
+  148  setenforce enforcing
+  149  man semanage-fcontext
+  150  # semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
+  151         # restorecon -R -v /web
+  152  semanage fcontext -a -t httpd_sys_content_t "/repo(/.*)?"
+  153  ls -dZ /repo
+  154  restorecon -Rv /repo
+  155  ls -dZ /repo
+  156  getenforce
+  157  curl localhost
+  158  sed -i -e 's/^Listen.*/Listen 82/' /etc/httpd/conf/httpd.conf 
+  159  systemctl restart httpd
+  160  systemctl status httpd
+  161  grep AVC /var/log/audit/audit.log 
+  162  semanage port -l | grep 80
+  163  semanage port -a -t http_port_t -p tcp 82
+  164  systemctl restart httpd
+  165  systemctl status httpd
+  166  getsebool -a | less
+  167  getsebool -a | grep http
+  168  getsebool -a | grep ftp
+  169  setsebool -P ftpd_anon_write on
+  170  getsebool -a | grep ftp
+  171  journalctl | grep sealert
+  172  sealert -l 087ad7c6-7626-4888-89ec-b4d38fbdc074 | less
+  173  ausearch -c 'httpd' --raw | audit2allow -M my-httpd 
+  174  ls
+  175  vim my-httpd.te 
+  176  journalctl | grep sealert
+  177  sealert -l 17b7e13e-4baf-4bca-a576-b453780953c7
+  178  semanage user -l
+  179  semanage login -l
+  180  cat /etc/passwd
+  181  usermod -aG wheel anna
+  182  passwd anna
+  183  semanage login -a -s sysadm_u anna
+  184  semanage login -l
+  185  semanage login -m -s user_u anna
+  186  semanage user -l
+  187  semanage login -l
+  188  useradd -G wheel linda
+  189  passwd linda
+  190  semanage login -m -s user_u linda
+  191  semanage login -a -s user_u linda
+  192  semanage login -l
+  193  su - linda
+  194  chvt 4
+  195  ssh anna@localhost
+  196  systemctl status sshd
+  197  vim /etc/pam.d/login
+  198  getsebool -a | grep sysad
+  199  setsebool -P ssh_sysadm_login on
+  200  ssh anna@localhost
+  201  grep AVC /var/log/audit/audit.log 
+  202  cd linuxsecurity/
+  203  ls
+  204  cat resources.txt 
+  205  cd /etc/selinux/
+  206  ls
+  207  cd targeted/
+  208  ls
+  209  cd context
+  210  cd contexts
+  211  ls
+  212  ls users/
+  213  cd users/
+  214  cat user_u 
+  215  cd ../files/
+  216  s
+  217  ls
+  218  cat file_contexts.local
+  219  cd ../..
+  220  ls
+  221  cd logins/
+  222  ls
+  223  cd ..
+  224  cat seusers 
+  225  cd
+  226  history
+  227  vim /etc/fstab
+  228  mount -o remount,rw /secret/
+  229  cd /secret
+  230  vim myscript
+  231  chmod +x myscript 
+  232  ./myscript
+  233  ls -l 
+  234  chattr +i hosts
+  235  rm -f hosts
+  236  ls -l hosts
+  237  lsattr hosts
+  238  chattr -i hosts
+  239  systemd-analyze blame
+  240  systemd-analyze security 
+  241  systemd-analyze security sshd.service
+  242  man systemd.directives
+  243  man systemd.exec
+  244  cd
+  245  dnf search scap
+  246  dnf install openscap openscap-utils scap-security-guide
+  247  scap-workbench
+  248  dnf search workbench
+  249  dnf install openscap-scanner
+  250  dnf install scap-workbench
+  251  dnf repolist
+  252  scap-workbench
+  253  ssh student@192.168.29.99
+  254  ssh ansible@192.168.29.99
+  255  history > /tmp/july25.txt
